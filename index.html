@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="el">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ελληνικά Κανάλια - Ζωντανά</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="/images/gov_logos-08_16x16_favicon.ico"
+    />
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- React, ReactDOM, Babel (χωρίς βήμα build, μέσω CDN) -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Δεδομένα καναλιών -->
+    <script src="./src/data/channels.js"></script>
+
+    <!-- React components (μεταγλωττίζονται στο browser από Babel standalone) -->
+    <script
+      type="text/babel"
+      data-presets="react"
+      src="./src/components/ChannelItem.jsx"
+    ></script>
+    <script
+      type="text/babel"
+      data-presets="react"
+      src="./src/components/Sidebar.jsx"
+    ></script>
+    <script
+      type="text/babel"
+      data-presets="react"
+      src="./src/components/ContentArea.jsx"
+    ></script>
+    <script
+      type="text/babel"
+      data-presets="react"
+      src="./src/components/App.jsx"
+    ></script>
+  </body>
+</html>
