@@ -37,7 +37,7 @@ window.CHANNEL_GROUPS = [
       },
       {
         "name": "SKAI",
-        "url": "http://skai-live-back.siliconweb.com/media/cambria4/index_bitrate2000K.m3u8"
+        "url": "https://netmax.gr"
       },
       {
         "name": "OPEN TV",
@@ -229,7 +229,7 @@ window.CHANNEL_GROUPS = [
     "channels": [
       {
         "name": "ERT WORLD",
-        "url": "http://cbd537474fbad4634b64787657ff6456.msvdn.net/ertworld/ert_world_main/mainabr/playlist.m3u8"
+        "url": "https://siliconweb.com"
       },
       {
         "name": "EURONEWS",
@@ -496,7 +496,7 @@ window.CHANNEL_GROUPS = [
     "channels": [
       {
         "name": "MAD TV",
-        "url": "https://netmax.gr"
+        "url": "https://www.youtube.com/c/madtvgreece/live"
       },
       {
         "name": "BARAZA TV HD",

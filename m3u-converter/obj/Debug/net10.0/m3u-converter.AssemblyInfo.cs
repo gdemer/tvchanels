@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("m3u-converter")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+11ee6309ed8cc33227b938bfa1cda57ff4f8bfe6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e81b06089c7aa4e235cdab22704c3da6d63e1d3d")]
 [assembly: System.Reflection.AssemblyProductAttribute("m3u-converter")]
 [assembly: System.Reflection.AssemblyTitleAttribute("m3u-converter")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

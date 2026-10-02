@@ -32,33 +32,35 @@ class Program
 
                 if (!string.IsNullOrEmpty(urlLine) && !urlLine.StartsWith("#"))
                 {
-                    // Παίρνουμε το καθαρό όνομα του καναλιού από το EXTINF
-                    string name = infoLine.Split(',').Last().Trim().ToUpper();
+                    string lowUrl = urlLine.ToLower();
 
-                    // 🔥 ΑΠΟΛΥΤΗ ΑΝΤΙΚΑΤΑΣΤΑΣΗ ΟΛΟΚΛΗΡΟΥ ΤΟΥ URL ΜΕ ΒΑΣΗ ΤΟ ΟΝΟΜΑ
-                    if (name.Equals("ERT1 HD") || name.Equals("ERT1") || name.Contains("ΕΡΤ 1")) 
+                    // 🔥 ΕΞΥΠΝΗ ΑΝΤΙΚΑΤΑΣΤΑΣΗ ΜΕ ΒΑΣΗ ΤΟ ΠΑΛΙΟ URL ΓΙΑ ΝΑ ΜΗΝ ΧΑΛΑΝΕ ΤΑ ΑΛΛΑ ΚΑΝΑΛΙΑ
+                    if (lowUrl.Contains("ert1/ert_ev1_main") || lowUrl.Contains("ert_1")) 
                         urlLine = "https://siliconweb.com";
                     
-                    else if (name.Equals("ERT2 HD") || name.Equals("ERT2") || name.Contains("ΕΡΤ 2")) 
+                    else if (lowUrl.Contains("ert2/ert_ev2_main") || lowUrl.Contains("ert_2")) 
                         urlLine = "https://siliconweb.com";
                     
-                    else if (name.Equals("ERT3 HD") || name.Equals("ERT3") || name.Contains("ΕΡΤ 3")) 
+                    else if (lowUrl.Contains("ert3/ert_ev3_main") || lowUrl.Contains("ert_3")) 
                         urlLine = "https://siliconweb.com";
                     
-                    else if (name.Contains("ERT NEWS") || name.Contains("ΕΡΤ NEWS")) 
+                    else if (lowUrl.Contains("ert_news") || lowUrl.Contains("ertnews")) 
                         urlLine = "https://siliconweb.com";
                     
-                    else if (name.Contains("ERT SPORTS") || name.Contains("ΕΡΤ SPORTS")) 
+                    else if (lowUrl.Contains("sports1/ert_sports1") || lowUrl.Contains("ert_sports")) 
                         urlLine = "https://siliconweb.com";
                     
-                    else if (name.Equals("STAR")) 
+                    else if (lowUrl.Contains("star1mediumhd") || lowUrl.Contains("livestar.siliconweb.com")) 
                         urlLine = "https://star.gr";
                     
-                    else if (name.Contains("OPEN TV") || name.Equals("OPEN")) 
+                    else if (lowUrl.Contains("liveopencloud") || lowUrl.Contains("cambria4/index")) 
                         urlLine = "https://netmax.gr";
                     
-                    else if (name.Equals("MAD TV"))
+                    else if (lowUrl.Contains("madtv.gr") || lowUrl.Contains("madtv/live"))
                         urlLine = "https://netmax.gr";
+                    
+                    else if (lowUrl.Contains("ertworld"))
+                        urlLine = "https://siliconweb.com";
 
                     var groupMatch = Regex.Match(infoLine, @"group-title=""([^""]+)""");
                     string region = groupMatch.Success ? groupMatch.Groups[1].Value : "ΔΙΑΦΟΡΑ";
