@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Projects\\TvChanels\\m3u-converter\\m3u-converter.csproj": {}
+    "C:\\Projects\\tvchanels\\m3u-converter\\m3u-converter.csproj": {}
   },
   "projects": {
-    "C:\\Projects\\TvChanels\\m3u-converter\\m3u-converter.csproj": {
+    "C:\\Projects\\tvchanels\\m3u-converter\\m3u-converter.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Projects\\TvChanels\\m3u-converter\\m3u-converter.csproj",
+        "projectUniqueName": "C:\\Projects\\tvchanels\\m3u-converter\\m3u-converter.csproj",
         "projectName": "m3u-converter",
-        "projectPath": "C:\\Projects\\TvChanels\\m3u-converter\\m3u-converter.csproj",
+        "projectPath": "C:\\Projects\\tvchanels\\m3u-converter\\m3u-converter.csproj",
         "packagesPath": "C:\\Users\\gdeme\\.nuget\\packages\\",
-        "outputPath": "C:\\Projects\\TvChanels\\m3u-converter\\obj\\",
+        "outputPath": "C:\\Projects\\tvchanels\\m3u-converter\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

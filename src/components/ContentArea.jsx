@@ -1,34 +1,84 @@
 /* Δεξί content area: εμφανίζει το επιλεγμένο κανάλι μέσα σε embedded iframe. */
 function ContentArea({ channel }) {
-  // Αν δεν έχει επιλεγεί κανένα κανάλι ακόμα (αρχική κατάσταση)
+  const videoContainerRef = React.useRef(null);
+  const playerRef = React.useRef(null);
+
+  React.useEffect(() => {
+    // Έλεγχος διαθεσιμότητας της βιβλιοθήκης video.js
+    const vjs = window.videojs || (typeof videojs !== 'undefined' ? videojs : null);
+
+    if (channel && videoContainerRef.current && vjs) {
+      // 1. Καθαρισμός προηγούμενου player αν υπάρχει
+      if (playerRef.current) {
+        playerRef.current.dispose();
+        playerRef.current = null;
+      }
+
+      // 2. Δημιουργούμε δυναμικά ένα νέο καθαρό <video> tag στο DOM
+      videoContainerRef.current.innerHTML = '';
+      const videoEl = document.createElement('video');
+      videoEl.className = 'video-js vjs-default-skin vjs-big-play-centered';
+      videoEl.style.width = '100%';
+      videoEl.style.height = '100%';
+      videoContainerRef.current.appendChild(videoEl);
+
+      // 3. Αρχικοποίηση του νέου player
+      playerRef.current = vjs(videoEl, {
+        controls: true,
+        autoplay: true,
+        preload: 'auto',
+        fluid: true,
+        responsive: true
+      });
+
+      // 4. Ανάθεση του stream
+      playerRef.current.src({
+        src: channel.url,
+        type: 'application/x-mpegURL'
+      });
+
+      // 5. Διαχείριση σφαλμάτων stream (αν το λινκ είναι νεκρό ή μπλοκαρισμένο)
+      playerRef.current.on('error', function() {
+        const error = playerRef.current.error();
+        if (error && error.code === 4) {
+          // Αν αποτύχει, εμφανίζουμε ένα καθαρό κουμπί για εξωτερική προβολή ως εναλλακτική
+          videoContainerRef.current.innerHTML = `
+            <div style="padding: 40px; text-align: center; color: #fff; background: #222; border-radius: 8px;">
+              <p>⚠️ Το stream του καναλιού δεν υποστηρίζει απευθείας ενσωμάτωση στον browser.</p>
+              <a href="${channel.url}" target="_blank" rel="noopener noreferrer" 
+                 style="display: inline-block; margin-top: 15px; padding: 10px 20px; background: #ff4757; color: #fff; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                 🔗 Άνοιγμα σε εξωτερικό Player / Νέα Καρτέλα
+              </a>
+            </div>`;
+        }
+      });
+    }
+
+    // Καθαρισμός κατά το unmount
+    return () => {
+      if (playerRef.current) {
+        playerRef.current.dispose();
+        playerRef.current = null;
+      }
+    };
+  }, [channel]); // 👈 Εκτελείται ΑΠΑΡΑΙΤΗΤΑ κάθε φορά που αλλάζει το κανάλι
+
   if (!channel) {
     return (
-      <div className="content-area empty-state">
-        <div style={{ textAlign: 'center', padding: '50px', color: '#666' }}>
-          <h2>📺 Καλώς ορίσατε στο TV Channels App</h2>
-          <p>Παρακαλώ επιλέξτε ένα κανάλι από την αριστερή στήλη για να ξεκινήσει η αναπαραγωγή.</p>
-        </div>
+      <div className="content-area empty" style={{ flex: 1, padding: '20px', textAlign: 'center' }}>
+        <h2>📺 Καλώς ορίσατε</h2>
+        <p>Παρακαλώ επιλέξτε ένα κανάλι από τη λίστα.</p>
       </div>
     );
   }
 
   return (
     <div className="content-area" style={{ flex: 1, padding: '20px', display: 'flex', flexDirection: 'column' }}>
-      <div className="channel-header" style={{ marginBottom: '15px' }}>
-        <h2 style={{ margin: 0, color: '#333' }}>🔴 Τώρα Παίζει: {channel.name}</h2>
-      </div>
+      <h2 style={{ color: '#333', marginBottom: '15px' }}>🔴 Τώρα Παίζει: {channel.name}</h2>
       
-      {/* Το Iframe Container που κρατάει σταθερές τις αναλογίες της οθόνης */}
-      <div className="video-container" style={{ position: 'relative', width: '100%', height: 'calc(100vh - 150px)', border: '2px solid #ccc', borderRadius: '8px', overflow: 'hidden', backgroundColor: '#000' }}>
-        <iframe
-          src={channel.url}
-          title={channel.name}
-          width="100%"
-          height="100%"
-          allowFullScreen
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        ></iframe>
+      {/* Το Container που θα φιλοξενεί δυναμικά το video element */}
+      <div ref={videoContainerRef} className="my-player-container" style={{ width: '100%', maxWidth: '800px', backgroundColor: '#000', borderRadius: '8px', overflow: 'hidden' }}>
+        <div style={{ color: '#fff', padding: '20px', textAlign: 'center' }}>Προετοιμασία ροής...</div>
       </div>
     </div>
   );

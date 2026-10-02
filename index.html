@@ -4,27 +4,29 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Ελληνικά Κανάλια - Ζωντανά</title>
-    <link
-      rel="icon"
-      type="image/x-icon"
-      href="/images/gov_logos-08_16x16_favicon.ico"
-    />
+
+    <!-- 1. Στυλ Εφαρμογής & Video.js -->
     <link rel="stylesheet" href="./src/styles.css" />
-    <link href="https://zencdn.net" rel="stylesheet" />
-    <script src="https://zencdn.net"></script>
+    <link
+      href="https://unpkg.com/video.js/dist/video-js.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- 2. Βιβλιοθήκη Video.js (Φόρτωση στην αρχή για να είναι διαθέσιμη στα components) -->
+    <script src="https://unpkg.com/video.js/dist/video.min.js"></script>
   </head>
   <body>
     <div id="root"></div>
 
-    <!-- React, ReactDOM, Babel (χωρίς βήμα build, μέσω CDN) -->
+    <!-- 3. React, ReactDOM & Babel Core (Μέσω CDN) -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    <!-- Δεδομένα καναλιών -->
+    <!-- 4. Δεδομένα καναλιών (Global Variable: window.CHANNEL_GROUPS) -->
     <script src="./src/data/channels.js"></script>
 
-    <!-- React components (μεταγλωττίζονται στο browser από Babel standalone) -->
+    <!-- 5. React Components (Σε απόλυτη σειρά εξάρτησης) -->
     <script
       type="text/babel"
       data-presets="react"

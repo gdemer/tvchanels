@@ -9,7 +9,6 @@ class Program
 {
     static void Main(string[] args)
     {
-        // 1. Ορισμός διαδρομών (Άλλαξε τις διαδρομές με τις δικές σου)
         string m3uFilePath = @"C:\Projects\tvchanels\Greekstreamtv.m3u"; 
         string outputJsPath = @"C:\Projects\tvchanels\src\data\channels.js";
 
@@ -22,12 +21,10 @@ class Program
         var channelsList = new List<RawChannel>();
         string[] lines = File.ReadAllLines(m3uFilePath);
 
-        // 2. Parsing του M3U αρχείου
         for (int i = 0; i < lines.Length; i++)
         {
             string line = lines[i].Trim();
 
-            // Ψάχνουμε τις γραμμές που ξεκινούν με #EXTINF
             if (line.StartsWith("#EXTINF:"))
             {
                 string infoLine = line;
@@ -35,60 +32,53 @@ class Program
 
                 if (!string.IsNullOrEmpty(urlLine) && !urlLine.StartsWith("#"))
                 {
-                    // Regex για την εξαγωγή του group-title (Κατηγορία)
+                    // Εξαγωγή του ονόματος του καναλιού (μετά το τελευταίο κόμμα)
+                    string name = infoLine.Split(',').Last().Trim().ToUpper();
+
+                    // 🔥 ΣΤΟΧΕΥΜΕΝΗ ΔΙΟΡΘΩΣΗ ΜΕ ΒΑΣΗ ΤΟ ΟΝΟΜΑ ΚΑΙ ΟΧΙ ΤΟ URL
+                    if (name.Contains("ERT1") || name.Contains("ΕΡΤ 1")) 
+                        urlLine = @"https://siliconweb.com";
+                    else if (name.Contains("ERT2") || name.Contains("ΕΡΤ 2")) 
+                        urlLine = "https://siliconweb.com";
+                    else if (name.Contains("ERT3") || name.Contains("ΕΡΤ 3")) 
+                        urlLine = "https://siliconweb.com";
+                    else if (name.Contains("NEWS")) 
+                        urlLine = "https://siliconweb.com";
+                    else if (name.Contains("SPORTS") || name.Contains("ΣΠΟΡΤ")) 
+                        urlLine = "https://siliconweb.com";
+                    else if (name.Contains("STAR")) 
+                        urlLine = "https://star.gr";
+                    else if (name.Contains("OPEN")) 
+                        urlLine = "https://netmax.gr";
+                    else if (name.Contains("MAD"))
+                        urlLine = "https://netmax.gr";
+                    else if (name.Contains("WORLD"))
+                        urlLine = "https://siliconweb.com";
+
                     var groupMatch = Regex.Match(infoLine, @"group-title=""([^""]+)""");
                     string region = groupMatch.Success ? groupMatch.Groups[1].Value : "ΔΙΑΦΟΡΑ";
+                    string displayName = infoLine.Split(',').Last().Trim();
 
-                    // Το όνομα του καναλιού βρίσκεται πάντα μετά το τελευταίο κόμμα της γραμμής
-                    string name = infoLine.Split(',').Last().Trim();
-
-                    channelsList.Add(new RawChannel
-                    {
-                        Name = name,
-                        Url = urlLine,
-                        Region = region
-                    });
+                    channelsList.Add(new RawChannel { Name = displayName, Url = urlLine, Region = region });
                 }
             }
         }
 
-        // 3. Ομαδοποίηση ανά Κατηγορία/Περιοχή (Region)
         var groupedChannels = channelsList
             .GroupBy(c => c.Region)
-            .Select(g => new ChannelGroup
-            {
+            .Select(g => new ChannelGroup {
                 region = g.Key,
                 channels = g.Select(c => new Channel { name = c.Name, url = c.Url }).ToList()
-            })
-            .ToList();
+            }).ToList();
 
-        // 4. Μετατροπή σε μορφή JavaScript Global Variable
         string jsonOutput = JsonConvert.SerializeObject(groupedChannels, Formatting.Indented);
         string finalJsContent = $"/* Αυτόματο αρχείο δεδομένων από M3U Converter */\nwindow.CHANNEL_GROUPS = {jsonOutput};";
 
-        // 5. Αποθήκευση στο project
         File.WriteAllText(outputJsPath, finalJsContent);
-
-        Console.WriteLine($"Επιτυχής ενημέρωση! Το αρχείο δημιουργήθηκε στο: {outputJsPath}");
+        Console.WriteLine($"Επιτυχής ενημέρωση! Μετατράπηκαν {channelsList.Count} κανάλια σε {groupedChannels.Count} κατηγορίες.");
     }
 }
 
-// Βοηθητικές κλάσεις για το JSON structure
-class RawChannel
-{
-    public string Name { get; set; }
-    public string Url { get; set; }
-    public string Region { get; set; }
-}
-
-class ChannelGroup
-{
-    public string region { get; set; }
-    public List<Channel> channels { get; set; }
-}
-
-class Channel
-{
-    public string name { get; set; }
-    public string url { get; set; }
-}
+class RawChannel { public string Name { get; set; } public string Url { get; set; } public string Region { get; set; } }
+class ChannelGroup { public string region { get; set; } public List<Channel> channels { get; set; } }
+class Channel { public string name { get; set; } public string url { get; set; } }

@@ -5,23 +5,23 @@ window.CHANNEL_GROUPS = [
     "channels": [
       {
         "name": "ERT1 HD",
-        "url": "http://cbd537474fbad4634b64787657ff6456.msvdn.net/ert1/ert_ev1_main/mainabr/ert_ev1_main/main_1080/chunks.m3u8"
+        "url": "https://siliconweb.com"
       },
       {
         "name": "ERT2 HD",
-        "url": "http://cbd537474fbad4634b64787657ff6456.msvdn.net/ert2/ert_ev2_main/mainabr/ert_ev2_main/main_1080/chunks.m3u8"
+        "url": "https://siliconweb.com"
       },
       {
         "name": "ERT3 HD",
-        "url": "http://cbd537474fbad4634b64787657ff6456.msvdn.net/ert3/ert_ev3_main/mainabr/ert_ev3_main/main_1080/chunks.m3u8"
+        "url": "https://siliconweb.com"
       },
       {
         "name": "ERT NEWS",
-        "url": "http://ert-live-bcbs15228.siliconweb.com/media/ert_news/ert_news_3Mbps.m3u8"
+        "url": "https://siliconweb.com"
       },
       {
         "name": "ERT SPORTS",
-        "url": "http://cbd537474fbad4634b64787657ff6456.msvdn.net/sports1/ert_sports1_main/mainabr/ert_sports1_main/main_1080/chunks.m3u8"
+        "url": "https://siliconweb.com"
       },
       {
         "name": "MEGA",
@@ -33,7 +33,7 @@ window.CHANNEL_GROUPS = [
       },
       {
         "name": "STAR",
-        "url": "https://livestar.siliconweb.com/media/star1/star1mediumhd.m3u8"
+        "url": "https://star.gr"
       },
       {
         "name": "SKAI",
@@ -41,7 +41,7 @@ window.CHANNEL_GROUPS = [
       },
       {
         "name": "OPEN TV",
-        "url": "https://liveopencloud.siliconweb.com/1/ZlRza2R6L2tFRnFJ/eWVLSlQx/hls/live/playlist.m3u8"
+        "url": "https://netmax.gr"
       },
       {
         "name": "ANT1 EUROPE",
@@ -115,7 +115,7 @@ window.CHANNEL_GROUPS = [
       },
       {
         "name": "ERT SPORTS 2",
-        "url": "http://cbd537474fbad4634b64787657ff6456.msvdn.net/sports2/ert_sports2_main/mainabr/ert_sports2_main/main_1080/chunks.m3u8"
+        "url": "https://siliconweb.com"
       },
       {
         "name": "NS TV",
@@ -147,7 +147,7 @@ window.CHANNEL_GROUPS = [
       },
       {
         "name": "BCI 24 NEWS",
-        "url": "https://live.streams.ovh/netmedia/netmedia/playlist.m3u8"
+        "url": "https://siliconweb.com"
       },
       {
         "name": "NOTIOI TV",
@@ -229,15 +229,15 @@ window.CHANNEL_GROUPS = [
     "channels": [
       {
         "name": "ERT WORLD",
-        "url": "http://cbd537474fbad4634b64787657ff6456.msvdn.net/ertworld/ert_world_main/mainabr/playlist.m3u8"
+        "url": "https://siliconweb.com"
       },
       {
         "name": "EURONEWS",
-        "url": "https://www.dailymotion.com/embed/video/x2j7kha#tab_embed.m3u8"
+        "url": "https://siliconweb.com"
       },
       {
         "name": "EURONEWS BUP",
-        "url": "https://www.youtube.com/c/euronewsGreek/live"
+        "url": "https://siliconweb.com"
       }
     ]
   },
@@ -331,7 +331,7 @@ window.CHANNEL_GROUPS = [
       },
       {
         "name": "STAR K.E.",
-        "url": "https://www.dailymotion.com/embed/video/xqjey2#tab_embed.m3u8"
+        "url": "https://star.gr"
       },
       {
         "name": "BEST TV",
@@ -339,7 +339,7 @@ window.CHANNEL_GROUPS = [
       },
       {
         "name": "START TV",
-        "url": "https://live.cast-control.eu/StartMedia/StartMedia/playlist.m3u8"
+        "url": "https://star.gr"
       },
       {
         "name": "TRT TV",
@@ -407,7 +407,7 @@ window.CHANNEL_GROUPS = [
       },
       {
         "name": "PRO NEWS",
-        "url": "https://storemusic.top:8222/superb33/superb33/playlist.m3u8"
+        "url": "https://siliconweb.com"
       },
       {
         "name": "HLEKTRA TV",
@@ -463,7 +463,7 @@ window.CHANNEL_GROUPS = [
       },
       {
         "name": "STAR BE",
-        "url": "http://127.0.0.1:88/https://www.twitch.tv/tvstarfm"
+        "url": "https://star.gr"
       },
       {
         "name": "FLASH TV",
@@ -496,7 +496,7 @@ window.CHANNEL_GROUPS = [
     "channels": [
       {
         "name": "MAD TV",
-        "url": "https://www.youtube.com/c/madtvgreece/live"
+        "url": "https://netmax.gr"
       },
       {
         "name": "BARAZA TV HD",
