@@ -32,28 +32,33 @@ class Program
 
                 if (!string.IsNullOrEmpty(urlLine) && !urlLine.StartsWith("#"))
                 {
-                    // Εξαγωγή του ονόματος του καναλιού (μετά το τελευταίο κόμμα)
+                    // Παίρνουμε το καθαρό όνομα του καναλιού από το EXTINF
                     string name = infoLine.Split(',').Last().Trim().ToUpper();
 
-                    // 🔥 ΣΤΟΧΕΥΜΕΝΗ ΔΙΟΡΘΩΣΗ ΜΕ ΒΑΣΗ ΤΟ ΟΝΟΜΑ ΚΑΙ ΟΧΙ ΤΟ URL
-                    if (name.Contains("ERT1") || name.Contains("ΕΡΤ 1")) 
-                        urlLine = @"https://siliconweb.com";
-                    else if (name.Contains("ERT2") || name.Contains("ΕΡΤ 2")) 
+                    // 🔥 ΑΠΟΛΥΤΗ ΑΝΤΙΚΑΤΑΣΤΑΣΗ ΟΛΟΚΛΗΡΟΥ ΤΟΥ URL ΜΕ ΒΑΣΗ ΤΟ ΟΝΟΜΑ
+                    if (name.Equals("ERT1 HD") || name.Equals("ERT1") || name.Contains("ΕΡΤ 1")) 
                         urlLine = "https://siliconweb.com";
-                    else if (name.Contains("ERT3") || name.Contains("ΕΡΤ 3")) 
+                    
+                    else if (name.Equals("ERT2 HD") || name.Equals("ERT2") || name.Contains("ΕΡΤ 2")) 
                         urlLine = "https://siliconweb.com";
-                    else if (name.Contains("NEWS")) 
+                    
+                    else if (name.Equals("ERT3 HD") || name.Equals("ERT3") || name.Contains("ΕΡΤ 3")) 
                         urlLine = "https://siliconweb.com";
-                    else if (name.Contains("SPORTS") || name.Contains("ΣΠΟΡΤ")) 
+                    
+                    else if (name.Contains("ERT NEWS") || name.Contains("ΕΡΤ NEWS")) 
                         urlLine = "https://siliconweb.com";
-                    else if (name.Contains("STAR")) 
+                    
+                    else if (name.Contains("ERT SPORTS") || name.Contains("ΕΡΤ SPORTS")) 
+                        urlLine = "https://siliconweb.com";
+                    
+                    else if (name.Equals("STAR")) 
                         urlLine = "https://star.gr";
-                    else if (name.Contains("OPEN")) 
+                    
+                    else if (name.Contains("OPEN TV") || name.Equals("OPEN")) 
                         urlLine = "https://netmax.gr";
-                    else if (name.Contains("MAD"))
+                    
+                    else if (name.Equals("MAD TV"))
                         urlLine = "https://netmax.gr";
-                    else if (name.Contains("WORLD"))
-                        urlLine = "https://siliconweb.com";
 
                     var groupMatch = Regex.Match(infoLine, @"group-title=""([^""]+)""");
                     string region = groupMatch.Success ? groupMatch.Groups[1].Value : "ΔΙΑΦΟΡΑ";
@@ -75,7 +80,7 @@ class Program
         string finalJsContent = $"/* Αυτόματο αρχείο δεδομένων από M3U Converter */\nwindow.CHANNEL_GROUPS = {jsonOutput};";
 
         File.WriteAllText(outputJsPath, finalJsContent);
-        Console.WriteLine($"Επιτυχής ενημέρωση! Μετατράπηκαν {channelsList.Count} κανάλια σε {groupedChannels.Count} κατηγορίες.");
+        Console.WriteLine($"Επιτυχής ενημέρωση! Μετατράπηκαν {channelsList.Count} κανάλια.");
     }
 }
 

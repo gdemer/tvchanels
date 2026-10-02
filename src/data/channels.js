@@ -147,7 +147,7 @@ window.CHANNEL_GROUPS = [
       },
       {
         "name": "BCI 24 NEWS",
-        "url": "https://siliconweb.com"
+        "url": "https://live.streams.ovh/netmedia/netmedia/playlist.m3u8"
       },
       {
         "name": "NOTIOI TV",
@@ -229,15 +229,15 @@ window.CHANNEL_GROUPS = [
     "channels": [
       {
         "name": "ERT WORLD",
-        "url": "https://siliconweb.com"
+        "url": "http://cbd537474fbad4634b64787657ff6456.msvdn.net/ertworld/ert_world_main/mainabr/playlist.m3u8"
       },
       {
         "name": "EURONEWS",
-        "url": "https://siliconweb.com"
+        "url": "https://www.dailymotion.com/embed/video/x2j7kha#tab_embed.m3u8"
       },
       {
         "name": "EURONEWS BUP",
-        "url": "https://siliconweb.com"
+        "url": "https://www.youtube.com/c/euronewsGreek/live"
       }
     ]
   },
@@ -331,7 +331,7 @@ window.CHANNEL_GROUPS = [
       },
       {
         "name": "STAR K.E.",
-        "url": "https://star.gr"
+        "url": "https://www.dailymotion.com/embed/video/xqjey2#tab_embed.m3u8"
       },
       {
         "name": "BEST TV",
@@ -339,7 +339,7 @@ window.CHANNEL_GROUPS = [
       },
       {
         "name": "START TV",
-        "url": "https://star.gr"
+        "url": "https://live.cast-control.eu/StartMedia/StartMedia/playlist.m3u8"
       },
       {
         "name": "TRT TV",
@@ -407,7 +407,7 @@ window.CHANNEL_GROUPS = [
       },
       {
         "name": "PRO NEWS",
-        "url": "https://siliconweb.com"
+        "url": "https://storemusic.top:8222/superb33/superb33/playlist.m3u8"
       },
       {
         "name": "HLEKTRA TV",
@@ -463,7 +463,7 @@ window.CHANNEL_GROUPS = [
       },
       {
         "name": "STAR BE",
-        "url": "https://star.gr"
+        "url": "http://127.0.0.1:88/https://www.twitch.tv/tvstarfm"
       },
       {
         "name": "FLASH TV",
