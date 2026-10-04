@@ -2,9 +2,123 @@
 function ContentArea({ channel }) {
   const videoContainerRef = React.useRef(null);
   const playerRef = React.useRef(null);
+  const [showIframeFallback, setShowIframeFallback] = React.useState(false);
 
   React.useEffect(() => {
-    // Έλεγχος διαθεσιμότητας της βιβλιοθήκης video.js
+    setShowIframeFallback(Boolean(channel && channel.pageOnly));
+  }, [channel]);
+
+  React.useEffect(() => {
+    if (
+      !channel ||
+      channel.pageOnly ||
+      showIframeFallback ||
+      !videoContainerRef.current
+    ) {
+      return undefined;
+    }
+
+    setShowIframeFallback(false);
+    const vjs = window.videojs || (typeof videojs !== 'undefined' ? videojs : null);
+
+    if (!vjs) {
+      return undefined;
+    }
+
+    const videoElement = document.createElement('video');
+    videoElement.className = 'video-js vjs-default-skin vjs-big-play-centered';
+    videoElement.playsInline = true;
+    videoContainerRef.current.replaceChildren(videoElement);
+
+    const player = vjs(videoElement, {
+      controls: true,
+      autoplay: true,
+      preload: 'auto',
+      fluid: false,
+      fill: true,
+    });
+    playerRef.current = player;
+
+    player.on('error', () => {
+      if (playerRef.current === player) {
+        setShowIframeFallback(true);
+      }
+    });
+
+    player.src({
+      src: channel.url,
+      type: 'application/x-mpegURL',
+    });
+
+    return () => {
+      if (playerRef.current === player) {
+        playerRef.current = null;
+        if (!player.isDisposed()) {
+          player.dispose();
+        }
+      }
+    };
+  }, [channel, showIframeFallback]);
+
+  if (!channel) {
+    return <main className="content-area content-area--empty"><h2>Παρακαλώ επιλέξτε κανάλι</h2></main>;
+  }
+
+  const fallbackUrl =
+    channel.fallbackUrl ||
+    (/^4e\b/i.test(channel.name)
+      ? 'http://www.tv4e.gr/livestreaming.php'
+      : channel.url);
+
+  if (channel.pageOnly && /ertflix\.gr/i.test(fallbackUrl)) {
+    return (
+      <main className="content-area content-area--empty">
+        <h2>{channel.name}</h2>
+        <p>Άνοιξε το ERTFLIX Live και επίλεξε {channel.name} από τη λίστα καναλιών.</p>
+        <p>Αν εμφανιστεί σχετικό μήνυμα, χρειάζεται πλήρης οθόνη ή ανάλυση τουλάχιστον 1024×800.</p>
+        <a
+          className="open-new-tab"
+          href={fallbackUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Άνοιγμα ERTFLIX Live σε νέα καρτέλα ↗
+        </a>
+      </main>
+    );
+  }
+
+  return (
+    <main className="content-area content-area--player">
+       <div className="content-area-header">
+        <span className="channel-icon" aria-hidden="true">📺</span>
+        <h2>{channel.name}</h2>
+        <a className="open-new-tab" href={channel.fallbackUrl || channel.url} target="_blank" rel="noopener noreferrer">
+          Άνοιγμα σε νέα καρτέλα ↗
+        </a>
+      </div>
+      {showIframeFallback ? (
+        <iframe
+          className="content-player-frame"
+          src={fallbackUrl}
+          title={channel.name}
+          allow="autoplay; encrypted-media; picture-in-picture"
+          allowFullScreen
+          referrerPolicy="no-referrer"
+        />
+      ) : (
+        <div ref={videoContainerRef} className="content-player-host" />
+      )}
+    </main>
+  );
+}
+
+
+function ContentArea3({ channel }) {
+  const videoContainerRef = React.useRef(null);
+  const playerRef = React.useRef(null);
+
+  React.useEffect(() => {
     const vjs = window.videojs || (typeof videojs !== 'undefined' ? videojs : null);
 
     if (channel && videoContainerRef.current && vjs) {
@@ -14,7 +128,10 @@ function ContentArea({ channel }) {
         playerRef.current = null;
       }
 
-      // 2. Δημιουργούμε δυναμικά ένα νέο καθαρό <video> tag στο DOM
+      // 2. Παίρνουμε το καθαρό URL από το αρχείο δεδομένων
+      const correctUrl = channel.url;
+
+      // 3. Δημιουργία νέου <video> tag στο DOM
       videoContainerRef.current.innerHTML = '';
       const videoEl = document.createElement('video');
       videoEl.className = 'video-js vjs-default-skin vjs-big-play-centered';
@@ -22,63 +139,151 @@ function ContentArea({ channel }) {
       videoEl.style.height = '100%';
       videoContainerRef.current.appendChild(videoEl);
 
-      // 3. Αρχικοποίηση του νέου player
+      // 4. Αρχικοποίηση Video.js
       playerRef.current = vjs(videoEl, {
         controls: true,
         autoplay: true,
         preload: 'auto',
-        fluid: true,
-        responsive: true
+        fluid: true
       });
 
-      // 4. Ανάθεση του stream
+      // 5. Ανάθεση της ροής βίντεο
       playerRef.current.src({
-        src: channel.url,
+        src: correctUrl,
         type: 'application/x-mpegURL'
       });
 
-      // 5. Διαχείριση σφαλμάτων stream (αν το λινκ είναι νεκρό ή μπλοκαρισμένο)
+      // 6. Διαχείριση σφαλμάτων (Fail-safe)
       playerRef.current.on('error', function() {
-        const error = playerRef.current.error();
-        if (error && error.code === 4) {
-          // Αν αποτύχει, εμφανίζουμε ένα καθαρό κουμπί για εξωτερική προβολή ως εναλλακτική
-          videoContainerRef.current.innerHTML = `
-            <div style="padding: 40px; text-align: center; color: #fff; background: #222; border-radius: 8px;">
-              <p>⚠️ Το stream του καναλιού δεν υποστηρίζει απευθείας ενσωμάτωση στον browser.</p>
-              <a href="${channel.url}" target="_blank" rel="noopener noreferrer" 
-                 style="display: inline-block; margin-top: 15px; padding: 10px 20px; background: #ff4757; color: #fff; text-decoration: none; border-radius: 5px; font-weight: bold;">
-                 🔗 Άνοιγμα σε εξωτερικό Player / Νέα Καρτέλα
-              </a>
-            </div>`;
-        }
+        videoContainerRef.current.innerHTML = `
+          <div style="padding: 30px; text-align: center; color: #fff; background: #222; border-radius: 8px;">
+            <p>⚠️ Η ζωντανή ροή δεν είναι διαθέσιμη αυτή τη στιγμή ενσωματωμένη.</p>
+            <a href="${correctUrl}" target="_blank" rel="noopener noreferrer" 
+               style="display: inline-block; margin-top: 10px; padding: 10px 15px; background: #007bff; color: #fff; text-decoration: none; border-radius: 5px;">
+               🔗 Εξωτερική προβολή καναλιού
+            </a>
+          </div>`;
       });
     }
 
-    // Καθαρισμός κατά το unmount
     return () => {
       if (playerRef.current) {
         playerRef.current.dispose();
         playerRef.current = null;
       }
     };
-  }, [channel]); // 👈 Εκτελείται ΑΠΑΡΑΙΤΗΤΑ κάθε φορά που αλλάζει το κανάλι
+  }, [channel]);
 
   if (!channel) {
     return (
-      <div className="content-area empty" style={{ flex: 1, padding: '20px', textAlign: 'center' }}>
-        <h2>📺 Καλώς ορίσατε</h2>
-        <p>Παρακαλώ επιλέξτε ένα κανάλι από τη λίστα.</p>
+      <div style={{ padding: '20px', textAlign: 'center', color: '#666' }}>
+        <h2>Παρακαλώ επιλέξτε κανάλι</h2>
       </div>
     );
   }
 
   return (
-    <div className="content-area" style={{ flex: 1, padding: '20px', display: 'flex', flexDirection: 'column' }}>
-      <h2 style={{ color: '#333', marginBottom: '15px' }}>🔴 Τώρα Παίζει: {channel.name}</h2>
+    <div className="content-area" style={{ flex: 1, padding: '20px' }}>
+      <h2 style={{ color: '#333', marginBottom: '15px' }}>🔴 {channel.name}</h2>
+      <div ref={videoContainerRef} style={{ width: '100%', maxWidth: '800px', backgroundColor: '#000', borderRadius: '8px', overflow: 'hidden' }}>
+        <div style={{ color: '#fff', padding: '20px', textAlign: 'center' }}>Φόρτωση ροής...</div>
+      </div>
+    </div>
+  );
+}
+
+function ContentArea2({ channel }) {
+  const videoContainerRef = React.useRef(null);
+  const playerRef = React.useRef(null);
+console.log("Rendering ContentArea for channel:", channel);
+  React.useEffect(() => {
+    const vjs = window.videojs || (typeof videojs !== 'undefined' ? videojs : null);
+
+    if (channel && videoContainerRef.current && vjs) {
+      // 1. Καθαρισμός προηγούμενου player
+      if (playerRef.current) {
+        playerRef.current.dispose();
+        playerRef.current = null;
+      }
+
+      // 2. 🔥 ΔΙΟΡΘΩΣΗ: Έλεγχος αν το URL έχει καταστραφεί από τη C#
+      let correctUrl = channel.url;
+      const currentUrl = channel.url ? channel.url.toLowerCase().trim() : "";
+      const currentName = channel.name ? channel.name.toUpperCase().trim() : "";
+      console.error("Current URL:", currentUrl);
+      console.error("Current Name:", currentName);
+
+      // Αν η C# έβγαλε το χαλασμένο siliconweb.com ή star.gr
+      if (currentUrl === "https://siliconweb.com/" || currentUrl === "https://siliconweb.com" || currentUrl.indexOf("msvdn.net") > -1 || currentUrl === "https://star.gr") {
+        
+        // Διόρθωση με βάση λέξεις-κλειδιά στο όνομα χωρίς ευαισθησία σε κενά
+        if (currentName.indexOf("ERT1") > -1 || currentName.indexOf("ΕΡΤ 1") > -1 || currentName.indexOf("ERT 1") > -1) {
+          correctUrl = "https://siliconweb.com";
+        } else if (currentName.indexOf("ERT2") > -1 || currentName.indexOf("ΕΡΤ 2") > -1 || currentName.indexOf("ERT 2") > -1) {
+          correctUrl = "https://siliconweb.com";
+        } else if (currentName.indexOf("ERT3") > -1 || currentName.indexOf("ΕΡΤ 3") > -1 || currentName.indexOf("ERT 3") > -1) {
+          correctUrl = "https://siliconweb.com";
+        } else if (currentName.indexOf("NEWS") > -1) {
+          correctUrl = "https://siliconweb.com";
+        } else if (currentName.indexOf("STAR") > -1) {
+          correctUrl = "https://star.gr";
+        } else if (currentName.indexOf("OPEN") > -1) {
+          correctUrl = "https://netmax.gr";
+        }
+      }
       
-      {/* Το Container που θα φιλοξενεί δυναμικά το video element */}
-      <div ref={videoContainerRef} className="my-player-container" style={{ width: '100%', maxWidth: '800px', backgroundColor: '#000', borderRadius: '8px', overflow: 'hidden' }}>
-        <div style={{ color: '#fff', padding: '20px', textAlign: 'center' }}>Προετοιμασία ροής...</div>
+      // 3. Δημιουργία καθαρού <video> στο DOM
+      videoContainerRef.current.innerHTML = '';
+      const videoEl = document.createElement('video');
+      videoEl.className = 'video-js vjs-default-skin vjs-big-play-centered';
+      videoEl.style.width = '100%';
+      videoEl.style.height = '100%';
+      videoContainerRef.current.appendChild(videoEl);
+
+      // 4. Αρχικοποίηση Player
+      playerRef.current = vjs(videoEl, {
+        controls: true,
+        autoplay: true,
+        preload: 'auto',
+        fluid: true
+      });
+
+      // 5. Ανάθεση του διορθωμένου URL
+      playerRef.current.src({
+        src: correctUrl,
+        type: 'application/x-mpegURL'
+      });
+
+      // 6. Διαχείριση σφαλμάτων
+      playerRef.current.on('error', function() {
+        videoContainerRef.current.innerHTML = `
+          <div style="padding: 30px; text-align: center; color: #fff; background: #222; border-radius: 8px;">
+            <p>⚠️ Η ζωντανή ροή δεν είναι διαθέσιμη αυτή τη στιγμή ενσωματωμένη.</p>
+            <a href="${correctUrl}" target="_blank" rel="noopener noreferrer" 
+               style="display: inline-block; margin-top: 10px; padding: 10px 15px; background: #007bff; color: #fff; text-decoration: none; border-radius: 5px;">
+               🔗 Εξωτερική προβολή καναλιού
+            </a>
+          </div>`;
+      });
+    }
+
+    return () => {
+      if (playerRef.current) {
+        playerRef.current.dispose();
+        playerRef.current = null;
+      }
+    };
+  }, [channel]);
+
+  if (!channel) {
+    return <div style={{ padding: '20px', textAlign: 'center' }}><h2>Παρακαλώ επιλέξτε κανάλι</h2></div>;
+  }
+
+  return (
+    <div className="content-area" style={{ flex: 1, padding: '20px' }}>
+      <h2>🔴 {channel.name}</h2>
+      <div ref={videoContainerRef} style={{ width: '100%', maxWidth: '800px', backgroundColor: '#000', borderRadius: '8px', overflow: 'hidden' }}>
+        <div style={{ color: '#fff', padding: '20px', textAlign: 'center' }}>Φόρτωση ροής...</div>
       </div>
     </div>
   );

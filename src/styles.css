@@ -1,9 +1,11 @@
 :root {
   --bg: #0b1f3a;
-  --sidebar-bg: #071428;
+  --sidebar-bg: #486f91;
+  --sidebar-surface: #365b7a;
+  --sidebar-hover: #294a68;
   --accent: #00aeef;
   --text: #ffffff;
-  --muted: #9fb3c8;
+  --muted: #edf4fa;
 }
 
 * {
@@ -32,7 +34,7 @@ body {
   width: 280px;
   min-width: 240px;
   background-color: var(--sidebar-bg);
-  border-right: 1px solid #16304f;
+  border-right: 1px solid #8ca6bd;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -43,7 +45,7 @@ body {
   align-items: center;
   gap: 0.5rem;
   padding: 1rem;
-  border-bottom: 1px solid #16304f;
+  border-bottom: 1px solid #8ca6bd;
 }
 
 .sidebar-header h1 {
@@ -59,9 +61,14 @@ body {
   margin: 0.75rem;
   padding: 0.5rem 0.75rem;
   border-radius: 6px;
-  border: 1px solid #234a73;
-  background-color: #0f2843;
+  border: 1px solid #8ca6bd;
+  background-color: #0b1f3a;
   color: var(--text);
+}
+
+.sidebar-search::placeholder {
+  color: #c2d0df;
+  opacity: 1;
 }
 
 .sidebar-nav {
@@ -71,7 +78,7 @@ body {
 }
 
 .region-group {
-  border-bottom: 1px solid #10243d;
+  border-bottom: 1px solid #8ca6bd;
 }
 
 .region-header {
@@ -80,7 +87,7 @@ body {
   align-items: center;
   gap: 0.5rem;
   padding: 0.6rem 0.9rem;
-  background: none;
+  background-color: var(--sidebar-surface);
   border: none;
   color: var(--text);
   font-size: 0.95rem;
@@ -89,7 +96,7 @@ body {
 }
 
 .region-header:hover {
-  background-color: #0f2843;
+  background-color: var(--sidebar-hover);
 }
 
 .region-name {
@@ -117,7 +124,7 @@ body {
 }
 
 .channel-item:hover {
-  background-color: #0f2843;
+  background-color: var(--sidebar-hover);
   color: var(--text);
 }
 
@@ -138,6 +145,33 @@ body {
   flex-direction: column;
   padding: 1rem 1.5rem;
   overflow: hidden;
+}
+
+.content-area--player {
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+}
+
+.content-area--player > .content-player-host,
+.content-area--player .content-player-host > .video-js,
+.content-player-frame {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+.content-player-host {
+  position: relative;
+  background: #000;
+}
+
+.content-player-frame {
+  display: block;
+  border: 0;
+  background: #000;
 }
 
 .content-area--empty {

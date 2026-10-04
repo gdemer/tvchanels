@@ -30,44 +30,7 @@ class Program
                 string infoLine = line;
                 string urlLine = (i + 1 < lines.Length) ? lines[i + 1].Trim() : "";
 
-                if (!string.IsNullOrEmpty(urlLine) && !urlLine.StartsWith("#"))
-                {
-                    string lowUrl = urlLine.ToLower();
-
-                    // 🔥 ΕΞΥΠΝΗ ΑΝΤΙΚΑΤΑΣΤΑΣΗ ΜΕ ΒΑΣΗ ΤΟ ΠΑΛΙΟ URL ΓΙΑ ΝΑ ΜΗΝ ΧΑΛΑΝΕ ΤΑ ΑΛΛΑ ΚΑΝΑΛΙΑ
-                    if (lowUrl.Contains("ert1/ert_ev1_main") || lowUrl.Contains("ert_1")) 
-                        urlLine = "https://siliconweb.com";
-                    
-                    else if (lowUrl.Contains("ert2/ert_ev2_main") || lowUrl.Contains("ert_2")) 
-                        urlLine = "https://siliconweb.com";
-                    
-                    else if (lowUrl.Contains("ert3/ert_ev3_main") || lowUrl.Contains("ert_3")) 
-                        urlLine = "https://siliconweb.com";
-                    
-                    else if (lowUrl.Contains("ert_news") || lowUrl.Contains("ertnews")) 
-                        urlLine = "https://siliconweb.com";
-                    
-                    else if (lowUrl.Contains("sports1/ert_sports1") || lowUrl.Contains("ert_sports")) 
-                        urlLine = "https://siliconweb.com";
-                    
-                    else if (lowUrl.Contains("star1mediumhd") || lowUrl.Contains("livestar.siliconweb.com")) 
-                        urlLine = "https://star.gr";
-                    
-                    else if (lowUrl.Contains("liveopencloud") || lowUrl.Contains("cambria4/index")) 
-                        urlLine = "https://netmax.gr";
-                    
-                    else if (lowUrl.Contains("madtv.gr") || lowUrl.Contains("madtv/live"))
-                        urlLine = "https://netmax.gr";
-                    
-                    else if (lowUrl.Contains("ertworld"))
-                        urlLine = "https://siliconweb.com";
-
-                    var groupMatch = Regex.Match(infoLine, @"group-title=""([^""]+)""");
-                    string region = groupMatch.Success ? groupMatch.Groups[1].Value : "ΔΙΑΦΟΡΑ";
-                    string displayName = infoLine.Split(',').Last().Trim();
-
-                    channelsList.Add(new RawChannel { Name = displayName, Url = urlLine, Region = region });
-                }
+                
             }
         }
 
