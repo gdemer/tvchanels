@@ -78,6 +78,12 @@ function App() {
           ant1.pageOnly = true;
         }
 
+        const fourE = greekStreams.find((stream) => /^4E\b/i.test(stream.name));
+        if (fourE) {
+          fourE.fallbackUrl = "http://www.tv4e.gr/livestreaming.php";
+          fourE.pageOnly = true;
+        }
+
         if (!greekStreams.some((stream) => /^MEGA\b/i.test(stream.name))) {
           greekStreams.push({
             name: "MEGA",

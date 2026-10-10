@@ -70,6 +70,27 @@ function ContentArea({ channel }) {
       ? 'http://www.tv4e.gr/livestreaming.php'
       : channel.url);
 
+  if (
+    channel.pageOnly &&
+    /^4e\b/i.test(channel.name) &&
+    window.location.protocol === 'https:'
+  ) {
+    return (
+      <main className="content-area content-area--empty">
+        <h2>{channel.name}</h2>
+        <p>Η ιστοσελίδα 4Ε δεν υποστηρίζει HTTPS και δεν μπορεί να ενσωματωθεί σε σελίδα HTTPS.</p>
+        <a
+          className="open-new-tab"
+          href={fallbackUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Άνοιγμα 4Ε σε νέα καρτέλα ↗
+        </a>
+      </main>
+    );
+  }
+
   if (channel.pageOnly && /ertflix\.gr/i.test(fallbackUrl)) {
     return (
       <main className="content-area content-area--empty">
